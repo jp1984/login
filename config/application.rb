@@ -26,9 +26,9 @@ module Login
     # config.i18n.default_locale = :de
 
     config.generators do |g|
-    g.fixture_replacement :factory_girl
-end
-
+      g.fixture_replacement :factory_girl
+    end
+    config.assets.initialize_on_precompile = false
   end
 end
 
