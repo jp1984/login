@@ -19,7 +19,6 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
-
   config.include Mongoid::Matchers
   config.include FactoryGirl::Syntax::Methods
   config.include Capybara::DSL,                  type: :request
@@ -29,9 +28,20 @@ RSpec.configure do |config|
 
   config.before(:each) do
     ActionMailer::Base.deliveries.clear
-    end
+  end
 
-    config.after(:each) do
-      DatabaseCleaner.clean
-    end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+end
+
+def sign_in_with(resource)
+  name_resource = resource.class.to_s.downcase
+
+  visit "/#{name_resource.pluralize}/sign_in"
+
+  fill_in "#{name_resource}[email]",    with: resource.email
+  fill_in "#{name_resource}[password]", with: '123123123'
+
+  click_button "Sign in"
 end
